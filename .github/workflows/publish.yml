@@ -22,12 +22,17 @@ jobs:
       with:
         repository: dymanoid/CitiesSkylinesBinaries
         ref: refs/heads/master
-        path: $GITHUB_WORKSPACE\binaries
+        path: binaries
         token: ${{ secrets.PACKAGES_REPO_PAT }}
 
     - name: Build solution
       working-directory: src
-      run: msbuild SkyTools.sln /m /verbosity:minimal /restore /p:Configuration=Release /p:CitiesSkylinesBinaries="$env:GITHUB_WORKSPACE\binaries\"
+      run: msbuild SkyTools.sln /m /verbosity:minimal /restore /p:Configuration=Release /p:CitiesSkylinesBinaries="$env:GITHUB_WORKSPACE\..\binaries\"
 
     - name: Publish packages
-      run: dotnet nuget push .\src\bin\Release\*.nupkg -s "github" -k ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        dotnet nuget add source https://nuget.pkg.github.com/dymanoid/index.json -n github -u dymanoid -p $env:GitHubToken
+        dotnet nuget push .\bin\Release\*.nupkg -s github -k $env:GitHubToken
+      working-directory: src
+      env:
+        GitHubToken: ${{ secrets.GITHUB_TOKEN }}
