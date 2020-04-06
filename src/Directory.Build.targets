@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <Target Name="SetNuspecVariables" AfterTargets="Build" DependsOnTargets="Build" BeforeTargets="Pack">
-    <CreateProperty Value="assembly=$(AssemblyTitle);version=$(PackageVersion)">
+    <CreateProperty Value="assembly=$(AssemblyTitle);version=$(PackageVersion);branch=$(GitVersion_BranchName);commit=$(GitVersion_Sha)">
       <Output PropertyName="NuspecProperties" TaskParameter="Value" />
     </CreateProperty>
   </Target>

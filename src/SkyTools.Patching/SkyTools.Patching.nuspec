@@ -11,6 +11,7 @@
     <projectUrl>https://github.com/dymanoid/SkyTools</projectUrl>
     <description>Common tools for Cities: Skylines game mods</description>
     <copyright>Copyright © 2018-2020, dymanoid</copyright>
+    <repository type="git" url="https://github.com/dymanoid/SkyTools" branch="$branch$" commit="$commit$" />
     <dependencies>
       <group targetFramework=".NETFramework3.5">
           <dependency id="SkyTools.Common" version="$version$" />

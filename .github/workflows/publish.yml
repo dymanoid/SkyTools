@@ -30,9 +30,7 @@ jobs:
       run: msbuild SkyTools.sln /m /verbosity:minimal /restore /p:Configuration=Release /p:CitiesSkylinesBinaries="$env:GITHUB_WORKSPACE\..\binaries\"
 
     - name: Publish packages
-      run: |
-        dotnet nuget add source https://nuget.pkg.github.com/dymanoid/index.json -n github -u dymanoid -p $env:GitHubToken
-        dotnet nuget push .\bin\Release\*.nupkg -s github -k $env:GitHubToken
+      run: dotnet nuget push .\bin\Release\*.nupkg -s nuget.org -k ${env:NuGetApiKey}
       working-directory: src
       env:
-        GitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
