@@ -1,0 +1,33 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags: ['*']
+
+jobs:
+  build:
+    name: Build solution
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v1
+
+    - name: Setup MSBuild environment
+      uses: microsoft/setup-msbuild@v1.0.0
+
+    - name: Get referenced binaries
+      uses: actions/checkout@v1
+      with:
+        repository: dymanoid/CitiesSkylinesBinaries
+        ref: refs/heads/master
+        path: $GITHUB_WORKSPACE\binaries
+        token: ${{ secrets.PACKAGES_REPO_PAT }}
+
+    - name: Build solution
+      working-directory: src
+      run: msbuild SkyTools.sln /m /verbosity:minimal /restore /p:Configuration=Release /p:CitiesSkylinesBinaries="$env:GITHUB_WORKSPACE\binaries\"
+
+    - name: Publish packages
+      run: dotnet nuget push .\src\bin\Release\*.nupkg -s "github" -k ${{ secrets.GITHUB_TOKEN }}
